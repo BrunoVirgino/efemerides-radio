@@ -1,0 +1,143 @@
+import json
+from datetime import datetime
+
+# Banco de dados de efemérides (Formato: MÊS-DIA)
+efemerides = {
+    "01-01": "Dia Mundial da Confraternização Universal e da Paz. Em 1801, o astrônomo Giuseppe Piazzi descobriu o primeiro asteroide, Ceres.",
+    "01-09": "Dia do Fico: Em 1822, Dom Pedro I decidiu permanecer no Brasil, contrariando ordens de Portugal, marco rumo à Independência.",
+    "01-21": "Dia Nacional de Combate à Intolerância Religiosa, instituído pela Lei Federal nº 11.635/2007.",
+    "01-25": "Aniversário de São Paulo (SP). Em 1554, foi fundada a cidade de São Paulo pelos jesuítas.",
+    "01-27": "Dia Internacional em Memória das Vítimas do Holocausto, data da libertação do campo de Auschwitz-Birkenau em 1945.",
+    "01-31": "Em 1839, executada a sentença do escravizado Manuel Congo, líder de revolta em Vassouras (RJ), símbolo da resistência negra no Brasil.",
+    "02-02": "Dia de Iemanjá e Dia de Nossa Senhora dos Navegantes, celebrados amplamente em todo o Brasil, incluindo Minas Gerais.",
+    "02-04": "Dia Mundial do Câncer, data de conscientização global sobre prevenção e tratamento da doença.",
+    "02-11": "Dia Internacional das Mulheres e Meninas na Ciência, instituído pela ONU para promover a participação feminina na ciência.",
+    "02-13": "Dia Mundial do Rádio, proclamado pela UNESCO em 2011. Minas Gerais tem tradição de radiodifusão regional.",
+    "02-14": "Dia de São Valentim (Valentine's Day), comemorado mundialmente como Dia dos Namorados.",
+    "02-17": "Dia Mundial do Gato. Carnaval (data móvel).",
+    "02-21": "Dia Internacional da Língua Materna, instituído pela UNESCO para promover a diversidade linguística.",
+    "02-24": "Dia da Conquista do Voto Feminino no Brasil: Em 1932, foi conquistado o direito ao voto pelas mulheres.",
+    "03-01": "Dia do Turismo Ecológico. Aniversário de Ibirité (MG), município vizinho a Sarzedo. Aniversário de Igarapé (MG).",
+    "03-03": "Dia Mundial da Vida Selvagem, data da ONU para conscientização sobre a fauna e flora do planeta.",
+    "03-08": "Dia Internacional da Mulher. Em 1857, operárias de Nova York morreram em greve por melhores condições de trabalho.",
+    "03-15": "Dia Mundial dos Direitos do Consumidor, data que marca a luta por relações de consumo mais justas.",
+    "03-19": "Dia de São José, santo padroeiro de diversas cidades mineiras.",
+    "03-20": "Início do Outono no Hemisfério Sul. Dia Mundial da Felicidade.",
+    "03-21": "Dia Internacional da Luta pela Eliminação da Discriminação Racial, instituído pela ONU em memória ao Massacre de Sharpeville.",
+    "03-22": "Dia Mundial da Água, data para refletir sobre a importância dos recursos hídricos. Sarzedo tem o Ribeirão Sarzedo como curso d'água principal.",
+    "03-25": "Dia Nacional da Constituição: Em 1824, Dom Pedro I outorgou a primeira Constituição brasileira.",
+    "03-27": "Dia do Circo e Dia Mundial do Teatro, celebrações culturais mundiais.",
+    "04-01": "Dia Mundial de Conscientização do Autismo. Em 1964, início da Ditadura Militar no Brasil.",
+    "04-07": "Dia Nacional de Combate ao Bullying e à Violência na Escola.",
+    "04-12": "Dia Internacional do Voo Espacial Tripulado: Em 1961, Yuri Gagarin se tornou o primeiro humano no espaço.",
+    "04-15": "Dia da Conservação do Solo, data importante para regiões agrícolas como Sarzedo e entorno.",
+    "04-18": "Dia do Descobrimento do Brasil. Paixão de Cristo (data móvel), feriado religioso em Sarzedo e diversas cidades mineiras.",
+    "04-19": "Dia dos Povos Indígenas, data para reconhecer e valorizar a cultura dos povos originários do Brasil.",
+    "04-21": "Tiradentes: Em 1792, executado Joaquim José da Silva Xavier, mártir da Inconfidência Mineira. Feriado nacional.",
+    "04-22": "Em 1500, a frota comandada por Pedro Álvares Cabral avistou o território que seria o Brasil.",
+    "04-28": "Dia da Educação, data que celebra a importância do ensino para o desenvolvimento social.",
+    "04-30": "Dia Nacional da Mulher, celebrando conquistas e a luta pelos direitos femininos.",
+    "05-01": "Dia do Trabalho, celebrado mundialmente em homenagem às lutas dos trabalhadores.",
+    "05-05": "Dia da Língua Portuguesa, data que celebra o idioma falado no Brasil e em outros países.",
+    "05-08": "Dia da Vitória (Segunda Guerra Mundial): Em 1945, rendição da Alemanha nazista.",
+    "05-10": "Dia das Mães (data móvel), comemorado no segundo domingo de maio.",
+    "05-13": "Abolição da Escravatura: Em 1888, assinada a Lei Áurea pela Princesa Isabel.",
+    "05-18": "Dia Internacional dos Museus. Dia Nacional de Combate ao Abuso e à Exploração Sexual de Crianças e Adolescentes.",
+    "05-22": "Dia Internacional da Biodiversidade, data da ONU para conscientização sobre a diversidade biológica.",
+    "05-25": "Dia da África. Dia Nacional da Adoção.",
+    "05-28": "Dia Internacional de Luta pela Saúde da Mulher.",
+    "06-05": "Dia Mundial do Meio Ambiente, instituído pela ONU em 1972.",
+    "06-12": "Dia dos Namorados no Brasil. Dia Mundial contra o Trabalho Infantil.",
+    "06-15": "Dia Mundial de Conscientização da Violência contra a Pessoa Idosa, instituído pela ONU em 2006.",
+    "06-19": "Corpus Christi (data móvel), feriado religioso amplamente observado nas cidades históricas de Minas Gerais.",
+    "06-20": "Em 1917, inauguração do Conjunto da Estação Ferroviária de Sarzedo, marco do povoamento da região.",
+    "06-21": "Início do Inverno no Hemisfério Sul. Dia Nacional de Combate à Discriminação Racial.",
+    "06-28": "Dia Internacional do Orgulho LGBT, em memória à Rebelião de Stonewall de 1969.",
+    "07-02": "Independência da Bahia: Em 1823, expulsão definitiva das tropas portuguesas de Salvador.",
+    "07-04": "Dia da Independência dos Estados Unidos: Em 1776, aprovação da Declaração de Independência.",
+    "07-07": "Em 1936, criação do IBGE (Instituto Brasileiro de Geografia e Estatística).",
+    "07-09": "Revolução Constitucionalista de 1932 em São Paulo, movimento pela constitucionalização do país.",
+    "07-13": "Dia Mundial do Rock. Dia do Estatuto da Criança e do Adolescente.",
+    "07-17": "Dia de Proteção às Florestas. Sarzedo integra o cinturão verde da Região Metropolitana de Belo Horizonte.",
+    "07-18": "Dia Internacional de Nelson Mandela, em homenagem ao líder sul-africano.",
+    "07-20": "Dia do Amigo. Em 1969, o homem chegou à Lua pela primeira vez.",
+    "07-25": "Dia Nacional de Tereza de Benguela e da Mulher Negra. Dia do Escritor.",
+    "07-26": "Dia dos Avós, celebrado em diversos países.",
+    "07-28": "Dia do Agricultor. Sarzedo tem tradição agrícola como parte do cinturão verde da RMBH.",
+    "08-03": "Dia do Capoeirista. Dia do Fim da Censura no Brasil.",
+    "08-05": "Dia Nacional da Saúde, em homenagem ao nascimento de Oswaldo Cruz.",
+    "08-06": "Dia de Hiroshima: Em 1945, primeira bomba atômica foi lançada sobre a cidade japonesa.",
+    "08-09": "Dia Internacional dos Povos Indígenas. Dia dos Pais (data móvel, segundo domingo).",
+    "08-11": "Dia do Advogado. Dia do Estudante.",
+    "08-15": "Assunção de Nossa Senhora, feriado religioso em diversas cidades mineiras.",
+    "08-19": "Dia Mundial da Fotografia. Dia do Historiador.",
+    "08-22": "Dia do Folclore, celebrando as tradições populares brasileiras.",
+    "08-25": "Dia do Soldado, em homenagem ao nascimento do Duque de Caxias.",
+    "08-29": "Dia Nacional de Combate ao Fumo. Dia Nacional da Visibilidade Lésbica.",
+    "09-05": "Dia da Amazônia, data para conscientização sobre a maior floresta tropical do mundo.",
+    "09-07": "Independência do Brasil: Em 1822, Dom Pedro I proclamou a independência às margens do Ipiranga.",
+    "09-08": "Dia Mundial da Alfabetização, instituído pela UNESCO.",
+    "09-11": "Dia Nacional do Cerrado, bioma presente em Minas Gerais.",
+    "09-15": "Dia Internacional da Democracia. Dia do Cliente.",
+    "09-19": "Aniversário do Sistema Único de Saúde (SUS), criado pela Constituição de 1988.",
+    "09-21": "Dia da Árvore. Dia Internacional da Paz. Dia Nacional de Luta das Pessoas com Deficiência.",
+    "09-22": "Início da Primavera no Hemisfério Sul. Dia Mundial Sem Carro.",
+    "09-25": "Dia Nacional do Trânsito. Dia do Rádio.",
+    "09-27": "Dia Mundial do Turismo. Dia Nacional da Doação de Órgãos.",
+    "09-30": "Dia da Secretária. Dia Internacional da Navegação.",
+    "10-01": "Dia Internacional do Idoso, instituído pela ONU em 1991.",
+    "10-04": "Dia Mundial dos Animais. Dia de São Francisco de Assis, padroeiro dos animais.",
+    "10-05": "Dia Mundial dos Professores, instituído pela UNESCO em 1994.",
+    "10-12": "Dia de Nossa Senhora Aparecida, padroeira do Brasil. Dia das Crianças. Feriado nacional.",
+    "10-14": "Em 1947, o piloto americano Chuck Yeager quebrou a barreira do som pela primeira vez a bordo do Bell X-1.",
+    "10-15": "Dia do Professor: Em 1827, Dom Pedro I decretou a criação do Ensino Primário no Brasil.",
+    "10-16": "Dia Mundial da Alimentação, data da FAO para conscientização sobre a fome no mundo.",
+    "10-18": "Dia do Médico. Em 1915, nasceu Grande Otelo, ícone da cultura negra brasileira.",
+    "10-21": "Registro do Ofício dos Mestres de Capoeira como Patrimônio Cultural do Brasil (2008).",
+    "10-23": "Em 1906, o brasileiro Santos Dumont realizou o voo histórico do 14-Bis em Paris, marco para a aviação mundial.",
+    "10-25": "Dia do Dentista. Dia Internacional contra a Exploração da Mulher.",
+    "10-28": "Dia do Servidor Público, celebrando os trabalhadores do serviço público brasileiro.",
+    "10-29": "Dia Nacional da Psoríase. Dia Mundial do AVC.",
+    "11-02": "Finados, feriado nacional para homenagear os mortos.",
+    "11-05": "Dia Nacional do Designer. Dia do Radioamador.",
+    "11-07": "Dia do Radialista: Em 1903, nasceu em Ubá (MG) o músico e radialista Ary Barroso, homenageado pela data.",
+    "11-12": "Dia Nacional do Supermercado. Dia Mundial da Pneumonia.",
+    "11-15": "Proclamação da República: Em 1889, Marechal Deodoro da Fonseca proclamou a República no Brasil. Feriado nacional.",
+    "11-19": "Dia da Bandeira Nacional, celebrando o símbolo maior do Brasil.",
+    "11-20": "Dia Nacional da Consciência Negra, em memória a Zumbi dos Palmares. Feriado nacional desde 2024.",
+    "11-21": "Dia Nacional da Homeopatia. Dia Mundial da Televisão.",
+    "11-25": "Dia Internacional da Eliminação da Violência contra a Mulher, instituído pela ONU.",
+    "11-27": "Dia Nacional de Combate ao Câncer. Dia de Nossa Senhora das Graças, padroeira de Ibirité (MG).",
+    "12-01": "Dia Mundial de Combate à AIDS, data da ONU para conscientização sobre a doença.",
+    "12-04": "Dia de Santa Bárbara, padroeira de diversas cidades mineiras. Dia Nacional do Perdão.",
+    "12-08": "Dia de Nossa Senhora da Conceição, feriado em várias cidades mineiras, incluindo Belo Horizonte.",
+    "12-10": "Dia Internacional dos Direitos Humanos: Em 1948, a ONU adotou a Declaração Universal dos Direitos Humanos.",
+    "12-12": "Em 1897, inauguração de Belo Horizonte, capital de Minas Gerais.",
+    "12-15": "Dia Nacional da Economia Solidária. Dia do Jardineiro.",
+    "12-21": "Aniversário de Sarzedo (MG): Em 1995, o município conquistou sua emancipação política, desmembrando-se de Ibirité.",
+    "12-24": "Véspera de Natal, celebração cristã em todo o mundo.",
+    "12-25": "Natal, feriado nacional e celebração cristã do nascimento de Jesus Cristo.",
+    "12-31": "Fim de mais um ano de grandes histórias, aprendizados e recordações na programação da nossa rádio."
+}
+
+# Pega a data de hoje
+hoje_chave = datetime.now().strftime("%m-%d")
+hoje_formatado = datetime.now().strftime("%d/%m")
+
+# Pega o fato do dia ou usa uma mensagem padrão se não estiver cadastrado
+texto_hoje = efemerides.get(
+    hoje_chave, 
+    "Acompanhe os principais fatos históricos do Brasil e do mundo que marcaram esta data ao longo dos anos."
+)
+
+# Estrutura JSON que o blog vai ler
+conteudo = {
+    "data": hoje_formatado,
+    "texto": texto_hoje
+}
+
+# Salva no arquivo efemeride.json
+with open("efemeride.json", "w", encoding="utf-8") as f:
+    json.dump(conteudo, f, ensure_ascii=False, indent=2)
+
+print("Arquivo efemeride.json gerado com sucesso!")
