@@ -2,26 +2,29 @@ name: Atualizar Efemeride Diaria
 
 on:
   schedule:
-    - cron: '0 3 * * *' # Roda todo dia às 03:00 da manhã (UTC)
-  workflow_dispatch: # Permite rodar manualmente pelo site do GitHub quando quiser
+    - cron: '0 3 * * *'  # Roda todo dia 00h de Brasília
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Copiar repositorio
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configurar Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Executar script Python
         run: python gerar.py
 
       - name: Salvar alteracoes automaticamente
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Atualização automática da efeméride do dia"
+          commit_message: Atualização automática da efeméride do dia
           file_pattern: efemeride.json
