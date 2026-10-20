@@ -93,6 +93,7 @@ efemerides = {
     "10-16": "Dia Mundial da Alimentação. Criado pela FAO em 1945 para combater a fome no mundo.",
     "10-17": "Dia Internacional para Erradicação da Pobreza, Dia Nacional da Vacinação e Dia do Eletricista. Em 1933, Albert Einstein fugiu da Alemanha nazista e se mudou para os EUA. Em 1907, Marconi iniciou o primeiro serviço transatlântico sem fio, a base do rádio que usamos hoje em Sarzedo FM. Em 1814, o curioso Dilúvio de Cerveja de Londres matou 8 pessoas afogadas em cerveja. Em 1979, Madre Teresa ganhou o Nobel da Paz.",
     "10-18": "Dia do Médico. Em 1915, nasceu em Minas o Grande Otelo, gênio do cinema brasileiro. E Dia de São Lucas, padroeiro dos médicos.",
+    "10-20": "Dia do Poeta e do Maquinista Ferroviário. Em Minas, aniversário do município histórico de Paracatu. Em Sarzedo, a data exalta os ferroviários, cuja categoria foi o motor do povoamento local após a inauguração da estação em 1917.",
     "10-21": "Em 2008, o Ofício dos Mestres de Capoeira virou Patrimônio Cultural do Brasil.",
     "10-23": "Em 1906, Santos Dumont voou com o 14-Bis em Paris. Foi o primeiro voo homologado da história.",
     "10-25": "Dia do Dentista. Em 1884, foi criado o primeiro curso de Odontologia no Brasil.",
