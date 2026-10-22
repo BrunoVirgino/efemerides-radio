@@ -95,6 +95,7 @@ efemerides = {
     "10-18": "Dia do Médico. Em 1915, nasceu em Minas o Grande Otelo, gênio do cinema brasileiro. E Dia de São Lucas, padroeiro dos médicos.",
     "10-20": "Dia do Poeta e do Maquinista Ferroviário. Em Minas, aniversário do município histórico de Paracatu. Em Sarzedo, a data exalta os ferroviários, cuja categoria foi o motor do povoamento local após a inauguração da estação em 1917.",
     "10-21": "Em 2008, o Ofício dos Mestres de Capoeira virou Patrimônio Cultural do Brasil.",
+    "10-22": "Dia do Paraquedista (no Brasil, em homenagem ao primeiro salto de André-Jacques Garnerin em 1797). Dia do Enólogo, Dia Internacional de Atenção à Gagueira, Dia do Protesto Mundial Contra o Uso do Eletrochoque.",
     "10-23": "Em 1906, Santos Dumont voou com o 14-Bis em Paris. Foi o primeiro voo homologado da história.",
     "10-25": "Dia do Dentista. Em 1884, foi criado o primeiro curso de Odontologia no Brasil.",
     "10-28": "Dia do Servidor Público. Em 1939, Getúlio criou o DASP e organizou o serviço público.",
